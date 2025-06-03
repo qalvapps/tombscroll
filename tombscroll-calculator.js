@@ -1,116 +1,203 @@
-// 🌄 Constants
-const LIFE_EXPECTANCY = {
-  male: 76,
-  female: 81
+// --- CONFIG ---
+const CONFIG = {
+  background: '#fffef3',
+  textColor: '#333',
+  borderRadius: '24px',
+  maxWidth: '520px',
+  padding: '40px',
+  zIndex: 9999,
+
+  LIFE_EXPECTANCY: { male: 76, female: 81, other: 79 },
+  INCHES_PER_DAY_3HRS: 519,
+  INCHES_TO_MILES: 63360,
+  INCHES_TO_KM: 0.0000254,
+  EIFFEL_HEIGHT_INCHES: 12996,
+  EVEREST_HEIGHT_INCHES: 348031,
+  EVEREST_BASE_CAMP_INCHES: 211176,
 };
-const AVERAGE_SCROLL_HOURS_PER_DAY = 3.5;
-const SCROLL_DISTANCE_PER_DAY_INCHES = 519;
 
-const INCHES_PER_MILE = 63360;
-const INCHES_PER_KM = 39370.1;
-const EIFFEL_TOWER_HEIGHT_INCHES = 1063 * 12;
-const EVEREST_HEIGHT_INCHES = 348031;
-const EVEREST_BASE_CAMP_INCHES = 211176;
+// --- STYLE INJECTION ---
+const style = document.createElement('style');
+style.innerHTML = `
+  #tombscroll-calculator {
+    font-size: 16px;
+    border-radius: 24px !important;
+    padding: 40px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    background: #fffef3;
+    max-width: 520px;
+    margin: 60px auto;
+    text-align: center;
+  }
+  #tombscroll-calculator h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.5em;
+    color: #1e1e1e;
+  }
+  #tombscroll-calculator p,
+  #tombscroll-calculator ul {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+  }
+  #tombscroll-calculator input[type=number],
+  #tombscroll-calculator input[type=range] {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1.2rem;
+    width: 80px;
+    text-align: center;
+  }
+  #tombscroll-calculator button.ts-gender {
+    padding: 8px 16px;
+    border: 2px solid #aaa;
+    background: #f4f4f4;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #tombscroll-calculator button.ts-gender:hover {
+    background: #ddd;
+  }
+  #tombscroll-calculator button.ts-gender.active {
+    background: #ffc107;
+    border-color: #ffc107;
+  }
+  #tombscroll-calculator #ts-calculate {
+    background: #6a00ff;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: none;
+    color: white;
+  }
+  #tombscroll-calculator #ts-calculate:enabled {
+    cursor: pointer;
+    opacity: 1;
+  }
+  #tombscroll-calculator #ts-calculate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+document.head.appendChild(style);
 
-function waitForTombRoot() {
-  return new Promise((resolve) => {
-    const check = () => {
-      const el = document.getElementById("tombscroll-root");
-      if (el) return resolve(el);
-      requestAnimationFrame(check);
-    };
-    check();
-  });
-}
-
-function formatNum(n) {
-  return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
-}
-
-function buildCalculator(el) {
-  el.innerHTML = `
-    <style>
-      #tomb-form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        font-family: system-ui, sans-serif;
-        max-width: 400px;
-        padding: 16px;
-        background: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      }
-      #tomb-form input, #tomb-form select, #tomb-form button {
-        padding: 8px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-      }
-      #tomb-results {
-        margin-top: 24px;
-        font-size: 1rem;
-        line-height: 1.6;
-      }
-    </style>
-    <form id="tomb-form">
-      <label>
-        Your age:
-        <input type="number" id="age" min="1" max="120" required />
-      </label>
-      <label>
-        Gender:
-        <select id="gender" required>
-          <option value="">Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </label>
-      <button type="submit">Calculate</button>
-    </form>
-    <div id="tomb-results"></div>
+// --- BUILD UI ---
+function createCalculatorUI() {
+  const container = document.createElement('div');
+  container.id = 'tombscroll-calculator';
+  container.innerHTML = `
+    <h1>Tombscroll Calculator</h1>
+    <p>How much of your life is getting swiped away?</p>
+  
+    <div style="margin-top: 20px;">
+      <label>Your Age</label><br>
+      <input type="number" id="ts-age" min="13" max="100" placeholder="e.g. 35">
+    </div>
+  
+    <div style="margin-top: 20px;">
+      <label>Gender</label><br>
+      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 6px;">
+        <button class="ts-gender" data-gender="male">Male</button>
+        <button class="ts-gender" data-gender="female">Female</button>
+        <button class="ts-gender" data-gender="other">Other</button>
+      </div>
+    </div>
+  
+    <div style="margin-top: 20px;">
+      <label>Daily Screen Time (hrs)</label><br>
+      <input type="range" id="ts-screentime" min="0.5" max="8" step="0.5" value="3">
+      <div><strong><span id="ts-screentime-value">3.0</span> hrs/day</strong></div>
+    </div>
+  
+    <button id="ts-calculate" disabled>Calculate 💀</button>
+    <div id="ts-results" style="display: none; margin-top: 30px;"></div>
   `;
-
-  const form = el.querySelector("#tomb-form");
-  const results = el.querySelector("#tomb-results");
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const age = parseInt(form.age.value);
-    const gender = form.gender.value;
-    if (!age || !gender) return;
-
-    const expectancy = LIFE_EXPECTANCY[gender];
-    const daysLeft = Math.max(0, (expectancy - age) * 365);
-    const scrollDays = Math.round((AVERAGE_SCROLL_HOURS_PER_DAY / 24) * daysLeft);
-    const scrollYears = scrollDays / 365;
-    const lifeYearsLeft = daysLeft / 365;
-
-    const totalScrollInches = scrollDays * SCROLL_DISTANCE_PER_DAY_INCHES;
-    const miles = totalScrollInches / INCHES_PER_MILE;
-    const km = totalScrollInches / INCHES_PER_KM;
-    const towers = totalScrollInches / EIFFEL_TOWER_HEIGHT_INCHES;
-    const everests = totalScrollInches / EVEREST_HEIGHT_INCHES;
-    const baseCamps = totalScrollInches / EVEREST_BASE_CAMP_INCHES;
-
-    results.innerHTML = `
-      <p><strong>${formatNum(daysLeft)}</strong> days (${formatNum(lifeYearsLeft)} years) remaining in your life <em>(based on a lifespan of ${expectancy} years for ${gender}s)</em>.</p>
-      <p><strong>${formatNum(scrollDays)}</strong> of those days (${formatNum(scrollYears)} years) will be spent scrolling <em>(at ${AVERAGE_SCROLL_HOURS_PER_DAY} hrs/day)</em>.</p>
-      <p>Your thumb will travel:</p>
-      <ul style="margin-left: 1.5em;">
-        <li><strong>${formatNum(miles)}</strong> miles</li>
-        <li><strong>${formatNum(km)}</strong> kilometers</li>
-        <li><strong>${formatNum(towers)}</strong> Eiffel Towers tall</li>
-        <li><strong>${formatNum(everests)}</strong> Everests high</li>
-        <li><strong>${formatNum(baseCamps)}</strong> Base Camp ascents</li>
-      </ul>
-      <p style="margin-top: 1em;">
-        That’s more vertical scrolling than hiking to Base Camp — and halfway to the summit of Everest.<br>
-        <em>Every scroll is a choice. Make it count.</em>
-      </p>
-    `;
-  });
+  return container;
 }
 
-waitForTombRoot().then(buildCalculator);
-//console.log("✅ Tombscroll script loaded");
+// --- MAIN ---
+function waitForTombRoot(attempts = 10) {
+  const embedRoot = document.getElementById('tomb-root');
+  if (embedRoot) {
+    const target = embedRoot.parentElement || document.body;
+    const calc = createCalculatorUI();
+    target.appendChild(calc);
+    setupEventListeners();
+  } else if (attempts > 0) {
+    setTimeout(() => waitForTombRoot(attempts - 1), 300);
+  }
+}
+waitForTombRoot();
+
+// --- EVENT LOGIC ---
+let selectedGender = null;
+
+function setupEventListeners() {
+  document.querySelectorAll('.ts-gender').forEach(btn => {
+    btn.addEventListener('click', function () {
+      selectedGender = this.dataset.gender;
+      document.querySelectorAll('.ts-gender').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      checkForm();
+    });
+  });
+
+  document.getElementById('ts-screentime').addEventListener('input', function () {
+    document.getElementById('ts-screentime-value').textContent = parseFloat(this.value).toFixed(1);
+    checkForm();
+  });
+
+  document.getElementById('ts-age').addEventListener('input', checkForm);
+  document.getElementById('ts-calculate').addEventListener('click', calculate);
+}
+
+function checkForm() {
+  const age = parseInt(document.getElementById('ts-age').value);
+  const btn = document.getElementById('ts-calculate');
+  btn.disabled = !(age && selectedGender);
+}
+
+function calculate() {
+  const age = parseInt(document.getElementById('ts-age').value);
+  const screenTime = parseFloat(document.getElementById('ts-screentime').value);
+  const expectancy = CONFIG.LIFE_EXPECTANCY[selectedGender];
+  const remainingDays = Math.max(0, Math.floor((expectancy - age) * 365));
+  const yearsRemaining = (remainingDays / 365).toFixed(1);
+
+  const scrollDays = Math.floor((remainingDays * screenTime) / 24);
+  const yearsScrolling = (scrollDays / 365).toFixed(1);
+
+  const inchesPerHour = CONFIG.INCHES_PER_DAY_3HRS / 3;
+  const totalInches = scrollDays * 24 * inchesPerHour / screenTime;
+  const miles = (totalInches / CONFIG.INCHES_TO_MILES).toFixed(1);
+  const km = (totalInches * CONFIG.INCHES_TO_KM).toFixed(1);
+  const towers = Math.floor(totalInches / CONFIG.EIFFEL_HEIGHT_INCHES);
+  const everests = Math.floor(totalInches / CONFIG.EVEREST_HEIGHT_INCHES);
+  const baseCamps = Math.floor(totalInches / CONFIG.EVEREST_BASE_CAMP_INCHES);
+  
+  document.getElementById('ts-results').style.display = 'block';
+  document.getElementById('ts-results').innerHTML = `
+    <p><strong>${remainingDays.toLocaleString()}</strong> days (<strong>${yearsRemaining}</strong> years) remaining in your life<br>
+    <span style="opacity: 0.7;">based on a lifespan of ${expectancy} years for ${selectedGender}s</span></p>
+  
+    <p><strong>${scrollDays.toLocaleString()}</strong> days (<strong>${yearsScrolling}</strong> years) will be spent scrolling<br>
+    <span style="opacity: 0.7;">at ${screenTime} hrs/day</span></p>
+  
+    <p>Your thumb will travel:</p>
+    <ul style="margin-left: 1.5em;">
+      <li><strong>${miles}</strong> miles</li>
+      <li><strong>${km}</strong> kilometers</li>
+      <li><strong>${towers}</strong> Eiffel Towers tall</li>
+      <li><strong>${everests}</strong> Everests high</li>
+      <li><strong>${baseCamps}</strong> Base Camp ascents</li>
+    </ul>
+  
+    <p style="font-style: italic; opacity: 0.75; margin-top: 20px;">
+      Every scroll is a choice. Make it count.
+    </p>
+  `;
+}
