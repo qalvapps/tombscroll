@@ -8,9 +8,23 @@ const CONFIG = {
   maxWidth: '500px',
   padding: '30px',
   zIndex: 9999,
+
+  // Life Expectancy by gender
+  LIFE_EXPECTANCY: {
+    male: 76,
+    female: 81,
+    other: 79,
+  },
+
+  // Scroll metrics
+  INCHES_PER_DAY_3HRS: 519,
+  INCHES_TO_MILES: 63360,
+  INCHES_TO_KM: 0.0000254,
+
+  // Visual metaphors
+  EIFFEL_HEIGHT_INCHES: 12996,  // 1,083 feet
 };
 
-// --- CREATE UI ---
 function createCalculatorUI() {
   const container = document.createElement('div');
   container.id = 'tombscroll-calculator';
@@ -28,7 +42,7 @@ function createCalculatorUI() {
 
   container.innerHTML = `
     <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 10px;">Tombscroll Calculator</h1>
-    <p style="font-size: 0.9rem; opacity: 0.9;">See how much of your life you're scrolling away.</p>
+    <p style="font-size: 0.9rem; opacity: 0.9;">How much of your life is getting swiped away?</p>
 
     <div style="margin-top: 20px;">
       <label for="ts-age" style="display: block; font-weight: 600; margin-bottom: 6px;">Your Age</label>
@@ -57,7 +71,6 @@ function createCalculatorUI() {
   return container;
 }
 
-// --- WAIT FOR DOM TO LOAD + MOUNT UI ---
 function waitForTombRoot(attempts = 10) {
   const embedRoot = document.getElementById('tomb-root');
 
@@ -82,12 +95,9 @@ function waitForTombRoot(attempts = 10) {
 
 waitForTombRoot();
 
-// --- FORM LOGIC ---
 let selectedGender = null;
 
 function setupEventListeners() {
-  console.log("🎯 Setting up event listeners...");
-
   document.querySelectorAll('.ts-gender').forEach(btn => {
     btn.addEventListener('click', function () {
       selectedGender = this.dataset.gender;
@@ -101,22 +111,13 @@ function setupEventListeners() {
 
   const slider = document.getElementById('ts-screentime');
   const display = document.getElementById('ts-screentime-value');
-  if (slider && display) {
-    slider.addEventListener('input', function () {
-      display.textContent = parseFloat(this.value).toFixed(1);
-      checkForm();
-    });
-  }
+  slider.addEventListener('input', function () {
+    display.textContent = parseFloat(this.value).toFixed(1);
+    checkForm();
+  });
 
-  const ageInput = document.getElementById('ts-age');
-  if (ageInput) {
-    ageInput.addEventListener('input', checkForm);
-  }
-
-  const calcBtn = document.getElementById('ts-calculate');
-  if (calcBtn) {
-    calcBtn.addEventListener('click', calculate);
-  }
+  document.getElementById('ts-age').addEventListener('input', checkForm);
+  document.getElementById('ts-calculate').addEventListener('click', calculate);
 }
 
 function checkForm() {
@@ -137,15 +138,35 @@ function checkForm() {
 function calculate() {
   const age = parseInt(document.getElementById('ts-age').value);
   const screenTime = parseFloat(document.getElementById('ts-screentime').value);
+  const gender = selectedGender;
 
-  const expectancy = { male: 76, female: 81, other: 79 };
-  const remainingYears = Math.max(0, expectancy[selectedGender] - age);
-  const daysScrolling = Math.floor(remainingYears * 365 * (screenTime / 24));
-  const scrollMiles = Math.floor((daysScrolling * 173) / 63360); // 173 inches/day at 3 hrs
+  const lifeExpectancy = CONFIG.LIFE_EXPECTANCY[gender];
+  const remainingYears = Math.max(0, lifeExpectancy - age);
+  const totalRemainingDays = Math.floor(remainingYears * 365);
 
-  document.getElementById('ts-results').style.display = 'block';
-  document.getElementById('ts-results').innerHTML = `
-    <p><strong>${daysScrolling.toLocaleString()}</strong> days of your remaining life may be spent scrolling.</p>
-    <p>That's roughly <strong>${scrollMiles}</strong> miles of thumb movement.</p>
+  const scrollHours = totalRemainingDays * screenTime;
+  const scrollDays = Math.floor(scrollHours / 24);
+
+  const inchesPerHour = CONFIG.INCHES_PER_DAY_3HRS / 3;
+  const totalInches = scrollHours * inchesPerHour;
+  const miles = (totalInches / CONFIG.INCHES_TO_MILES).toFixed(1);
+  const km = (totalInches * CONFIG.INCHES_TO_KM).toFixed(1);
+  const eiffelCount = Math.floor(totalInches / CONFIG.EIFFEL_HEIGHT_INCHES);
+
+  const results = document.getElementById('ts-results');
+  results.style.display = 'block';
+  results.innerHTML = `
+    <p><strong>${totalRemainingDays.toLocaleString()}</strong> days remaining in your life <span style="opacity: 0.7;">(based on a lifespan of ${lifeExpectancy} years for ${gender}s)</span>.</p>
+
+    <p><strong>${scrollDays.toLocaleString()}</strong> of those days will be spent scrolling <span style="opacity: 0.7;">(at ${screenTime} hrs/day)</span>.</p>
+
+    <p>Your thumb will travel:</p>
+    <ul style="margin-left: 1em;">
+      <li><strong>${miles}</strong> miles</li>
+      <li><strong>${km}</strong> kilometers</li>
+      <li><strong>${eiffelCount}</strong> Eiffel Towers tall</li>
+    </ul>
+
+    <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">Every scroll is a choice. Make it count.</p>
   `;
 }
