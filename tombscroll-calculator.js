@@ -155,18 +155,24 @@ function calculate() {
 
   const results = document.getElementById('ts-results');
   results.style.display = 'block';
+  const yearsRemaining = (totalRemainingDays / 365).toFixed(1);
+
   results.innerHTML = `
-    <p><strong>${totalRemainingDays.toLocaleString()}</strong> days remaining in your life <span style="opacity: 0.7;">(based on a lifespan of ${lifeExpectancy} years for ${gender}s)</span>.</p>
-
-    <p><strong>${scrollDays.toLocaleString()}</strong> of those days will be spent scrolling <span style="opacity: 0.7;">(at ${screenTime} hrs/day)</span>.</p>
-
+    <p><strong>${totalRemainingDays.toLocaleString()}</strong> days (<strong>${yearsRemaining}</strong> years) remaining in your life<br>
+    <span style="opacity: 0.7;">(based on a lifespan of ${lifeExpectancy} years for ${gender}s)</span>.</p>
+  
+    <p><strong>${scrollDays.toLocaleString()}</strong> of those days will be spent scrolling<br>
+    <span style="opacity: 0.7;">(at ${screenTime} hrs/day)</span>.</p>
+  
     <p>Your thumb will travel:</p>
     <ul style="margin-left: 1em;">
       <li><strong>${miles}</strong> miles</li>
       <li><strong>${km}</strong> kilometers</li>
       <li><strong>${eiffelCount}</strong> Eiffel Towers tall</li>
     </ul>
-
-    <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">Every scroll is a choice. Make it count.</p>
+  
+    <p style="margin-top: 20px; font-style: italic; opacity: 0.8;">
+      Every scroll is a choice. Make it count.
+    </p>
   `;
 }
