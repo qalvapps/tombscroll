@@ -7,10 +7,13 @@ function createCalculator() {
     container.style.display = 'block';
     container.style.maxWidth = '100%';
     container.style.marginTop = '40px';
-    container.style.background = 'white';
+    // container.style.background = 'white';
     container.style.zIndex = '9999';
     container.style.position = 'relative';
-
+    container.style.minHeight = '100px';
+    container.style.padding = '30px';
+    container.style.background = '#fffbe6'; // temporary highlight
+    
     container.innerHTML = `
         <div style="
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -30,7 +33,9 @@ function createCalculator() {
     `;
 
     // const targetElement = document.body;
-    const targetElement = document.getElementById('tomb-root') || document.body;
+    // const targetElement = document.getElementById('tomb-root') || document.body;
+    const embedRoot = document.getElementById('tomb-root');
+    const targetElement = embedRoot?.parentElement || document.body;
     targetElement.appendChild(container);
     console.log("📌 Appended calculator to document.body");
 
