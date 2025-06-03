@@ -29,7 +29,8 @@ function createCalculator() {
         </div>
     `;
 
-    const targetElement = document.body;
+    // const targetElement = document.body;
+    const targetElement = document.getElementById('tomb-root') || document.body;
     targetElement.appendChild(container);
     console.log("📌 Appended calculator to document.body");
 
