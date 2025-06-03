@@ -168,14 +168,17 @@ function calculate() {
   const remainingDays = Math.max(0, Math.floor((expectancy - age) * 365));
   const yearsRemaining = (remainingDays / 365).toFixed(1);
 
-  const scrollDays = Math.floor((remainingDays * screenTime) / 24);
+  //const scrollDays = Math.floor((remainingDays * screenTime) / 24);
   const yearsScrolling = (scrollDays / 365).toFixed(1);
 
   const inchesPerHour = CONFIG.INCHES_PER_DAY_3HRS / 3;
   // const totalInches = scrollDays * 24 * inchesPerHour / screenTime;
 
+  //const userScrollPerDay = inchesPerHour * screenTime;
+  //const totalInches = scrollDays * userScrollPerDay;
   const userScrollPerDay = inchesPerHour * screenTime;
-  const totalInches = scrollDays * userScrollPerDay;
+  const totalInches = remainingDays * userScrollPerDay;
+  const scrollDays = Math.floor((remainingDays * screenTime) / 24);
   
   const miles = (totalInches / CONFIG.INCHES_TO_MILES).toFixed(1);
   const km = (totalInches * CONFIG.INCHES_TO_KM).toFixed(1);
