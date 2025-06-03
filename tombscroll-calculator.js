@@ -10,19 +10,19 @@ const CONFIG = {
   zIndex: 9999,
 };
 
-// --- FUNCTION TO BUILD CALCULATOR UI ---
+// --- CREATE UI ---
 function createCalculatorUI() {
   const container = document.createElement('div');
   container.id = 'tombscroll-calculator';
-  container.style.background = '#fffbe6';
-  container.style.color = '#333';
-  container.style.padding = '30px';
-  container.style.borderRadius = '20px';
+  container.style.background = CONFIG.background;
+  container.style.color = CONFIG.textColor;
+  container.style.padding = CONFIG.padding;
+  container.style.borderRadius = CONFIG.borderRadius;
   container.style.margin = '40px auto';
-  container.style.maxWidth = '500px';
+  container.style.maxWidth = CONFIG.maxWidth;
   container.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
   container.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-  container.style.zIndex = '9999';
+  container.style.zIndex = CONFIG.zIndex;
   container.style.position = 'relative';
   container.style.textAlign = 'center';
 
@@ -37,7 +37,7 @@ function createCalculatorUI() {
 
     <div style="margin-top: 20px;">
       <label style="display: block; font-weight: 600; margin-bottom: 6px;">Gender</label>
-      <div>
+      <div style="display: flex; justify-content: center; gap: 10px;">
         <button class="ts-gender" data-gender="male">Male</button>
         <button class="ts-gender" data-gender="female">Female</button>
         <button class="ts-gender" data-gender="other">Other</button>
@@ -54,11 +54,10 @@ function createCalculatorUI() {
 
     <div id="ts-results" style="display: none; margin-top: 30px; text-align: left;"></div>
   `;
-
   return container;
 }
 
-// --- SAFE APPEND FUNCTION ---
+// --- WAIT FOR DOM TO LOAD + MOUNT UI ---
 function waitForTombRoot(attempts = 10) {
   const embedRoot = document.getElementById('tomb-root');
 
@@ -68,10 +67,10 @@ function waitForTombRoot(attempts = 10) {
     targetElement.appendChild(calculator);
     console.log("📌 Appended calculator to:", targetElement);
 
-    // Scroll to it
     setTimeout(() => {
+      setupEventListeners();
       calculator.scrollIntoView({ behavior: 'smooth' });
-    }, 300);
+    }, 0);
 
   } else if (attempts > 0) {
     console.log(`⏳ Waiting for #tomb-root... (${10 - attempts + 1})`);
@@ -81,12 +80,14 @@ function waitForTombRoot(attempts = 10) {
   }
 }
 
-// --- START ---
 waitForTombRoot();
 
+// --- FORM LOGIC ---
 let selectedGender = null;
 
 function setupEventListeners() {
+  console.log("🎯 Setting up event listeners...");
+
   document.querySelectorAll('.ts-gender').forEach(btn => {
     btn.addEventListener('click', function () {
       selectedGender = this.dataset.gender;
@@ -100,14 +101,22 @@ function setupEventListeners() {
 
   const slider = document.getElementById('ts-screentime');
   const display = document.getElementById('ts-screentime-value');
-  slider.addEventListener('input', function () {
-    display.textContent = parseFloat(this.value).toFixed(1);
-    checkForm();
-  });
+  if (slider && display) {
+    slider.addEventListener('input', function () {
+      display.textContent = parseFloat(this.value).toFixed(1);
+      checkForm();
+    });
+  }
 
-  document.getElementById('ts-age').addEventListener('input', checkForm);
+  const ageInput = document.getElementById('ts-age');
+  if (ageInput) {
+    ageInput.addEventListener('input', checkForm);
+  }
 
-  document.getElementById('ts-calculate').addEventListener('click', calculate);
+  const calcBtn = document.getElementById('ts-calculate');
+  if (calcBtn) {
+    calcBtn.addEventListener('click', calculate);
+  }
 }
 
 function checkForm() {
@@ -132,7 +141,7 @@ function calculate() {
   const expectancy = { male: 76, female: 81, other: 79 };
   const remainingYears = Math.max(0, expectancy[selectedGender] - age);
   const daysScrolling = Math.floor(remainingYears * 365 * (screenTime / 24));
-  const scrollMiles = Math.floor(daysScrolling * 173); // 173 inches/day for 3hrs, converted to miles
+  const scrollMiles = Math.floor((daysScrolling * 173) / 63360); // 173 inches/day at 3 hrs
 
   document.getElementById('ts-results').style.display = 'block';
   document.getElementById('ts-results').innerHTML = `
