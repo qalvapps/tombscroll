@@ -259,9 +259,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Find a good place to insert the calculator
         // const targetElement = document.body.querySelector('main') || document.body;
-        const targetElement = document.currentScript.parentElement || document.body;
+        const targetElement = document.body;
         targetElement.appendChild(container);
-        console.log("📌 Appended calculator to:", targetElement);
+        console.log("📌 Appended calculator to document.body");
         setupEventListeners();
     }
     
