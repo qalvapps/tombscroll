@@ -172,7 +172,11 @@ function calculate() {
   const yearsScrolling = (scrollDays / 365).toFixed(1);
 
   const inchesPerHour = CONFIG.INCHES_PER_DAY_3HRS / 3;
-  const totalInches = scrollDays * 24 * inchesPerHour / screenTime;
+  // const totalInches = scrollDays * 24 * inchesPerHour / screenTime;
+
+  const userScrollPerDay = inchesPerHour * screenTime;
+  const totalInches = scrollDays * userScrollPerDay;
+  
   const miles = (totalInches / CONFIG.INCHES_TO_MILES).toFixed(1);
   const km = (totalInches * CONFIG.INCHES_TO_KM).toFixed(1);
   const towers = Math.floor(totalInches / CONFIG.EIFFEL_HEIGHT_INCHES);
