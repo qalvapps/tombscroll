@@ -89,15 +89,15 @@ document.head.appendChild(style);
 function createCalculatorUI() {
   const container = document.createElement('div');
   container.id = 'tombscroll-calculator';
-  container.innerHTML = \`
+  container.innerHTML = `
     <h1>Tombscroll Calculator</h1>
     <p>How much of your life is getting swiped away?</p>
-
+  
     <div style="margin-top: 20px;">
       <label>Your Age</label><br>
       <input type="number" id="ts-age" min="13" max="100" placeholder="e.g. 35">
     </div>
-
+  
     <div style="margin-top: 20px;">
       <label>Gender</label><br>
       <div style="display: flex; justify-content: center; gap: 10px; margin-top: 6px;">
@@ -106,16 +106,16 @@ function createCalculatorUI() {
         <button class="ts-gender" data-gender="other">Other</button>
       </div>
     </div>
-
+  
     <div style="margin-top: 20px;">
       <label>Daily Screen Time (hrs)</label><br>
       <input type="range" id="ts-screentime" min="0.5" max="8" step="0.5" value="3">
       <div><strong><span id="ts-screentime-value">3.0</span> hrs/day</strong></div>
     </div>
-
+  
     <button id="ts-calculate" disabled>Calculate 💀</button>
     <div id="ts-results" style="display: none; margin-top: 30px;"></div>
-  \`;
+  `;
   return container;
 }
 
