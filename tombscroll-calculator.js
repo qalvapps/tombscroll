@@ -1,6 +1,6 @@
 console.log("✅ Tombscroll script loaded");
 // Inject into the same <div> Carrd uses for your embed block
-const targetElement = document.currentScript.parentElement || document.body;
+
 const CONFIG = {
     // Life expectancy by gender (years)
     LIFE_EXPECTANCY: {
