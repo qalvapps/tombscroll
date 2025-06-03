@@ -258,7 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         // Find a good place to insert the calculator
-        const targetElement = document.body.querySelector('main') || document.body;
+        // const targetElement = document.body.querySelector('main') || document.body;
+        const targetElement = document.currentScript.parentElement || document.body;
         targetElement.appendChild(container);
         
         setupEventListeners();
