@@ -178,22 +178,22 @@ function calculate() {
   const towers = Math.floor(totalInches / CONFIG.EIFFEL_HEIGHT_INCHES);
 
   document.getElementById('ts-results').style.display = 'block';
-  document.getElementById('ts-results').innerHTML = \`
-    <p><strong>\${remainingDays.toLocaleString()}</strong> days (<strong>\${yearsRemaining}</strong> years) remaining in your life<br>
-    <span style="opacity: 0.7;">based on a lifespan of \${expectancy} years for \${selectedGender}s</span></p>
-
-    <p><strong>\${scrollDays.toLocaleString()}</strong> days (<strong>\${yearsScrolling}</strong> years) will be spent scrolling<br>
-    <span style="opacity: 0.7;">at \${screenTime} hrs/day</span></p>
-
+  document.getElementById('ts-results').innerHTML = `
+    <p><strong>${remainingDays.toLocaleString()}</strong> days (<strong>${yearsRemaining}</strong> years) remaining in your life<br>
+    <span style="opacity: 0.7;">based on a lifespan of ${expectancy} years for ${selectedGender}s</span></p>
+  
+    <p><strong>${scrollDays.toLocaleString()}</strong> days (<strong>${yearsScrolling}</strong> years) will be spent scrolling<br>
+    <span style="opacity: 0.7;">at ${screenTime} hrs/day</span></p>
+  
     <p>Your thumb will travel:</p>
     <ul style="margin-left: 1.5em;">
-      <li><strong>\${miles}</strong> miles</li>
-      <li><strong>\${km}</strong> kilometers</li>
-      <li><strong>\${towers}</strong> Eiffel Towers tall</li>
+      <li><strong>${miles}</strong> miles</li>
+      <li><strong>${km}</strong> kilometers</li>
+      <li><strong>${towers}</strong> Eiffel Towers tall</li>
     </ul>
-
+  
     <p style="font-style: italic; opacity: 0.75; margin-top: 20px;">
       Every scroll is a choice. Make it count.
     </p>
-  \`;
+  `;
 }
