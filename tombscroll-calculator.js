@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // const targetElement = document.body.querySelector('main') || document.body;
         const targetElement = document.currentScript.parentElement || document.body;
         targetElement.appendChild(container);
-        targetElement.append("🧪 Target element found!");
+        console.log("📌 Appended calculator to:", targetElement);
         setupEventListeners();
     }
     
