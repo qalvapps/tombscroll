@@ -83,3 +83,60 @@ function waitForTombRoot(attempts = 10) {
 
 // --- START ---
 waitForTombRoot();
+
+let selectedGender = null;
+
+function setupEventListeners() {
+  document.querySelectorAll('.ts-gender').forEach(btn => {
+    btn.addEventListener('click', function () {
+      selectedGender = this.dataset.gender;
+      document.querySelectorAll('.ts-gender').forEach(b => {
+        b.style.background = '#eee';
+      });
+      this.style.background = '#ffc107';
+      checkForm();
+    });
+  });
+
+  const slider = document.getElementById('ts-screentime');
+  const display = document.getElementById('ts-screentime-value');
+  slider.addEventListener('input', function () {
+    display.textContent = parseFloat(this.value).toFixed(1);
+    checkForm();
+  });
+
+  document.getElementById('ts-age').addEventListener('input', checkForm);
+
+  document.getElementById('ts-calculate').addEventListener('click', calculate);
+}
+
+function checkForm() {
+  const age = parseInt(document.getElementById('ts-age').value);
+  const btn = document.getElementById('ts-calculate');
+
+  if (age && selectedGender) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+  }
+}
+
+function calculate() {
+  const age = parseInt(document.getElementById('ts-age').value);
+  const screenTime = parseFloat(document.getElementById('ts-screentime').value);
+
+  const expectancy = { male: 76, female: 81, other: 79 };
+  const remainingYears = Math.max(0, expectancy[selectedGender] - age);
+  const daysScrolling = Math.floor(remainingYears * 365 * (screenTime / 24));
+  const scrollMiles = Math.floor(daysScrolling * 173); // 173 inches/day for 3hrs, converted to miles
+
+  document.getElementById('ts-results').style.display = 'block';
+  document.getElementById('ts-results').innerHTML = `
+    <p><strong>${daysScrolling.toLocaleString()}</strong> days of your remaining life may be spent scrolling.</p>
+    <p>That's roughly <strong>${scrollMiles}</strong> miles of thumb movement.</p>
+  `;
+}
