@@ -252,29 +252,53 @@ function calculate() {
   // Show results with user input summary
   document.getElementById('ts-results').style.display = 'block';
   document.getElementById('ts-results').innerHTML = `
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #6a00ff;">
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid #6a00ff;">
       <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e;">Your Input:</h3>
       <p style="margin: 5px 0; font-size: 0.95rem; color: #555;">
         <strong>Age:</strong> ${age} years old • <strong>Gender:</strong> ${selectedGender} • <strong>Screen Time:</strong> ${screenTime} hrs/day
       </p>
     </div>
 
-    <p><strong>${remainingDays.toLocaleString()}</strong> days (<strong>${yearsRemaining}</strong> years) remaining in your life<br>
-    <span style="opacity: 0.7;">based on a lifespan of ${expectancy} years for ${selectedGender}s</span></p>
+    <!-- Primary Shocking Stat: Years Scrolling -->
+    <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; text-align: center;">
+      <div style="font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 8px;">${yearsScrolling}</div>
+      <div style="font-size: 1.3rem; font-weight: 600; margin-bottom: 5px;">YEARS OF YOUR LIFE</div>
+      <div style="font-size: 1rem; opacity: 0.9;">will be spent scrolling</div>
+      <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 8px;">${scrollDays.toLocaleString()} days at ${screenTime} hrs/day</div>
+    </div>
+
+    <!-- Secondary Shocking Stat: Distance -->
+    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; text-align: center;">
+      <div style="font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 8px;">${miles}</div>
+      <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 5px;">MILES</div>
+      <div style="font-size: 1rem; opacity: 0.9;">your thumb will travel scrolling</div>
+      <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 8px;">${km} kilometers</div>
+    </div>
+
+    <!-- Mind-Blowing Comparisons -->
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+      <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e; text-align: center;">🤯 That's equivalent to scrolling...</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
+        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0;">
+          <div style="font-size: 1.8rem; font-weight: 700; color: #ff6b6b; margin-bottom: 5px;">${towers}</div>
+          <div style="font-size: 0.85rem; color: #666;">Eiffel Towers</div>
+        </div>
+        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0;">
+          <div style="font-size: 1.8rem; font-weight: 700; color: #667eea; margin-bottom: 5px;">${everests}</div>
+          <div style="font-size: 0.85rem; color: #666;">Mount Everests</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Life Context -->
+    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+      <div style="text-align: center;">
+        <div style="font-size: 1rem; color: #856404; margin-bottom: 8px;">⏳ <strong>Life remaining:</strong> ${yearsRemaining} years (${remainingDays.toLocaleString()} days)</div>
+        <div style="font-size: 0.9rem; color: #856404; opacity: 0.8;">Based on ${expectancy}-year lifespan for ${selectedGender}s</div>
+      </div>
+    </div>
   
-    <p><strong>${scrollDays.toLocaleString()}</strong> days (<strong>${yearsScrolling}</strong> years) will be spent scrolling<br>
-    <span style="opacity: 0.7;">at ${screenTime} hrs/day</span></p>
-  
-    <p>Your thumb will travel:</p>
-    <ul style="margin-left: 1.5em;">
-      <li><strong>${miles}</strong> miles</li>
-      <li><strong>${km}</strong> kilometers</li>
-      <li><strong>${towers}</strong> Eiffel Towers tall</li>
-      <li><strong>${everests}</strong> Everests high</li>
-      <li><strong>${baseCamps}</strong> Base Camp ascents</li>
-    </ul>
-  
-    <p style="font-style: italic; opacity: 0.75; margin-top: 20px;">
+    <p style="font-style: italic; opacity: 0.75; margin-top: 30px; font-size: 1.1rem; text-align: center; color: #666;">
       Every scroll is a choice. Make it count.
     </p>
     
