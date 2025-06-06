@@ -106,6 +106,21 @@ style.innerHTML = `
     opacity: 0.5;
     cursor: not-allowed;
   }
+  #tombscroll-calculator #ts-reset {
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  #tombscroll-calculator #ts-reset:hover {
+    background: #555;
+  }
   #tombscroll-calculator strong {
     font-weight: 600;
   }
@@ -120,27 +135,30 @@ function createCalculatorUI() {
     <h1>Tombscroll Calculator</h1>
     <p>How much of your remaining life will be swiped away?</p>
   
-    <div style="margin-top: 20px;">
-      <label>Your Age</label><br>
-      <input type="number" id="ts-age" min="13" max="100" placeholder="">
-    </div>
-  
-    <div style="margin-top: 20px;">
-      <label>Gender</label><br>
-      <div style="display: flex; justify-content: center; gap: 10px; margin-top: 6px;">
-        <button class="ts-gender" data-gender="male">Male</button>
-        <button class="ts-gender" data-gender="female">Female</button>
-        <button class="ts-gender" data-gender="other">Other</button>
+    <div id="ts-form">
+      <div style="margin-top: 20px;">
+        <label>Your Age</label><br>
+        <input type="number" id="ts-age" min="13" max="100" placeholder="e.g. 35">
       </div>
+    
+      <div style="margin-top: 20px;">
+        <label>Gender</label><br>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 6px;">
+          <button class="ts-gender" data-gender="male">Male</button>
+          <button class="ts-gender" data-gender="female">Female</button>
+          <button class="ts-gender" data-gender="other">Other</button>
+        </div>
+      </div>
+    
+      <div style="margin-top: 20px;">
+        <label>Daily Screen Time (hrs)</label><br>
+        <input type="range" id="ts-screentime" min="0.5" max="8" step="0.5" value="3">
+        <div><strong><span id="ts-screentime-value">3.0</span> hrs/day</strong></div>
+      </div>
+    
+      <button id="ts-calculate" disabled>Calculate 💀</button>
     </div>
-  
-    <div style="margin-top: 20px;">
-      <label>Daily Screen Time (hrs)</label><br>
-      <input type="range" id="ts-screentime" min="0.5" max="8" step="0.5" value="3">
-      <div><strong><span id="ts-screentime-value">3.0</span> hrs/day</strong></div>
-    </div>
-  
-    <button id="ts-calculate" disabled>Calculate 💀</button>
+    
     <div id="ts-results" style="display: none; margin-top: 30px;"></div>
   `;
   return container;
@@ -188,6 +206,26 @@ function checkForm() {
   btn.disabled = !(age && selectedGender);
 }
 
+function resetCalculator() {
+  // Show form
+  document.getElementById('ts-form').style.display = 'block';
+  
+  // Hide results
+  document.getElementById('ts-results').style.display = 'none';
+  
+  // Reset form values
+  document.getElementById('ts-age').value = '';
+  document.getElementById('ts-screentime').value = '3';
+  document.getElementById('ts-screentime-value').textContent = '3.0';
+  
+  // Reset gender selection
+  document.querySelectorAll('.ts-gender').forEach(b => b.classList.remove('active'));
+  selectedGender = null;
+  
+  // Disable calculate button
+  document.getElementById('ts-calculate').disabled = true;
+}
+
 function calculate() {
   const age = parseInt(document.getElementById('ts-age').value);
   const screenTime = parseFloat(document.getElementById('ts-screentime').value);
@@ -208,8 +246,19 @@ function calculate() {
   const everests = Math.floor(totalInches / CONFIG.EVEREST_HEIGHT_INCHES);
   const baseCamps = Math.floor(totalInches / CONFIG.EVEREST_BASE_CAMP_INCHES);
   
+  // Hide the form
+  document.getElementById('ts-form').style.display = 'none';
+  
+  // Show results with user input summary
   document.getElementById('ts-results').style.display = 'block';
   document.getElementById('ts-results').innerHTML = `
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #6a00ff;">
+      <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e;">Your Input:</h3>
+      <p style="margin: 5px 0; font-size: 0.95rem; color: #555;">
+        <strong>Age:</strong> ${age} years old • <strong>Gender:</strong> ${selectedGender} • <strong>Screen Time:</strong> ${screenTime} hrs/day
+      </p>
+    </div>
+
     <p><strong>${remainingDays.toLocaleString()}</strong> days (<strong>${yearsRemaining}</strong> years) remaining in your life<br>
     <span style="opacity: 0.7;">based on a lifespan of ${expectancy} years for ${selectedGender}s</span></p>
   
@@ -228,5 +277,7 @@ function calculate() {
     <p style="font-style: italic; opacity: 0.75; margin-top: 20px;">
       Every scroll is a choice. Make it count.
     </p>
+    
+    <button id="ts-reset" onclick="resetCalculator()">Tombscroll Again</button>
   `;
 }
