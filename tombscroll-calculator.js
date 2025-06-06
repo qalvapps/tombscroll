@@ -122,7 +122,7 @@ function createCalculatorUI() {
   
     <div style="margin-top: 20px;">
       <label>Your Age</label><br>
-      <input type="number" id="ts-age" min="13" max="100" placeholder="e.g. 35">
+      <input type="number" id="ts-age" min="13" max="100" placeholder="">
     </div>
   
     <div style="margin-top: 20px;">
