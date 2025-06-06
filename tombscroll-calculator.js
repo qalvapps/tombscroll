@@ -253,9 +253,9 @@ function calculate() {
   document.getElementById('ts-results').style.display = 'block';
   document.getElementById('ts-results').innerHTML = `
     <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid #6a00ff;">
-      <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e;">Your Input:</h3>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e;">You:</h3>
       <p style="margin: 5px 0; font-size: 0.95rem; color: #555;">
-        <strong>Age:</strong> ${age} years old • <strong>Gender:</strong> ${selectedGender} • <strong>Screen Time:</strong> ${screenTime} hrs/day
+        ${age} yr old ${selectedGender}<br><strong>Screen Time:</strong> ${screenTime} hrs/day
       </p>
     </div>
 
@@ -293,13 +293,13 @@ function calculate() {
     <!-- Life Context -->
     <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
       <div style="text-align: center;">
-        <div style="font-size: 1rem; color: #856404; margin-bottom: 8px;">⏳ <strong>Life remaining:</strong> ${yearsRemaining} years (${remainingDays.toLocaleString()} days)</div>
-        <div style="font-size: 0.9rem; color: #856404; opacity: 0.8;">Based on ${expectancy}-year lifespan for ${selectedGender}s</div>
+        <div style="font-size: 1rem; color: #856404; margin-bottom: 8px;">⏳ <strong>Life remaining:</strong> ${yearsRemaining} yrs<br>(${remainingDays.toLocaleString()} days)</div>
+        <div style="font-size: 0.9rem; color: #856404; opacity: 0.8;">*${expectancy} year lifespan for ${selectedGender}s</div>
       </div>
     </div>
   
     <p style="font-style: italic; opacity: 0.75; margin-top: 30px; font-size: 1.1rem; text-align: center; color: #666;">
-      Every scroll is a choice. Make it count.
+      Every scroll is a choice.<br>Make it count.
     </p>
     
     <button id="ts-reset" onclick="resetCalculator()">Tombscroll Again</button>
