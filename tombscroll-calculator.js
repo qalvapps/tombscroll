@@ -91,7 +91,7 @@ function createCalculatorUI() {
   container.id = 'tombscroll-calculator';
   container.innerHTML = `
     <h1>Tombscroll Calculator</h1>
-    <p>How much of your life is getting swiped away?</p>
+    <p>How much of your remaining life will be swiped away?</p>
   
     <div style="margin-top: 20px;">
       <label>Your Age</label><br>
