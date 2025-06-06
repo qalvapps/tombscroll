@@ -19,7 +19,10 @@ const CONFIG = {
 // --- STYLE INJECTION ---
 const style = document.createElement('style');
 style.innerHTML = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
   #tombscroll-calculator {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 16px;
     border-radius: 24px !important;
     padding: 40px !important;
@@ -28,32 +31,50 @@ style.innerHTML = `
     max-width: 520px;
     margin: 60px auto;
     text-align: center;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   #tombscroll-calculator h1 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 2.4rem;
+    font-weight: 700;
     margin-bottom: 0.5em;
     color: #1e1e1e;
+    letter-spacing: -0.02em;
   }
   #tombscroll-calculator p,
   #tombscroll-calculator ul {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
     color: #333;
+    font-weight: 400;
+  }
+  #tombscroll-calculator label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #1e1e1e;
   }
   #tombscroll-calculator input[type=number],
   #tombscroll-calculator input[type=range] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     border: 2px solid #ccc;
     border-radius: 10px;
     padding: 10px;
     font-size: 1.2rem;
+    font-weight: 500;
     width: 80px;
     text-align: center;
   }
   #tombscroll-calculator button.ts-gender {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     padding: 8px 16px;
     border: 2px solid #aaa;
     background: #f4f4f4;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 0.9rem;
     border-radius: 8px;
     cursor: pointer;
   }
@@ -63,8 +84,10 @@ style.innerHTML = `
   #tombscroll-calculator button.ts-gender.active {
     background: #ffc107;
     border-color: #ffc107;
+    font-weight: 600;
   }
   #tombscroll-calculator #ts-calculate {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #6a00ff;
     padding: 12px 24px;
     font-size: 1rem;
@@ -73,6 +96,7 @@ style.innerHTML = `
     margin-top: 20px;
     border: none;
     color: white;
+    letter-spacing: -0.01em;
   }
   #tombscroll-calculator #ts-calculate:enabled {
     cursor: pointer;
@@ -81,6 +105,9 @@ style.innerHTML = `
   #tombscroll-calculator #ts-calculate:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  #tombscroll-calculator strong {
+    font-weight: 600;
   }
 `;
 document.head.appendChild(style);
@@ -172,13 +199,8 @@ function calculate() {
   const yearsScrolling = (scrollDays / 365).toFixed(1);
 
   const inchesPerHour = CONFIG.INCHES_PER_DAY_3HRS / 3;
-  // const totalInches = scrollDays * 24 * inchesPerHour / screenTime;
-
-  //const userScrollPerDay = inchesPerHour * screenTime;
-  //const totalInches = scrollDays * userScrollPerDay;
   const userScrollPerDay = inchesPerHour * screenTime;
   const totalInches = remainingDays * userScrollPerDay;
-  //const scrollDays = Math.floor((remainingDays * screenTime) / 24);
   
   const miles = (totalInches / CONFIG.INCHES_TO_MILES).toFixed(1);
   const km = (totalInches * CONFIG.INCHES_TO_KM).toFixed(1);
