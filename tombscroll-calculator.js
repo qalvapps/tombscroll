@@ -37,7 +37,7 @@ style.innerHTML = `
   }
   #tombscroll-calculator h1 {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 2.4rem;
+    font-size: 2.0rem;
     font-weight: 700;
     margin-bottom: 0.5em;
     color: #1e1e1e;
