@@ -133,7 +133,7 @@ function createCalculatorUI() {
   container.id = 'tombscroll-calculator';
   container.innerHTML = `
     <h1>Tombscroll.com</h1>
-    <p>How much of your remaining life will be swiped away?</p>
+    <p>How many of your remaining years will be spent scrolling?</p>
   
     <div id="ts-form">
       <div style="margin-top: 20px;">
