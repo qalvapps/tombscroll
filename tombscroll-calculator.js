@@ -259,7 +259,6 @@ function calculate() {
       </p>
     </div>
 
-    <!-- Primary Shocking Stat: Years Scrolling -->
     <div style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; text-align: center;">
       <div style="font-size: 3.2rem; font-weight: 700; line-height: 1; margin-bottom: 8px;">${yearsScrolling}</div>
       <div style="font-size: 1.3rem; font-weight: 600; margin-bottom: 5px;">YEARS OF YOUR LIFE</div>
@@ -267,7 +266,6 @@ function calculate() {
       <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 8px;">${scrollDays.toLocaleString()} days at ${screenTime} hrs/day</div>
     </div>
 
-    <!-- Secondary Shocking Stat: Distance -->
     <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; text-align: center;">
       <div style="font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 8px;">${miles}</div>
       <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 5px;">MILES</div>
@@ -275,7 +273,6 @@ function calculate() {
       <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 8px;">${km} kilometers</div>
     </div>
 
-    <!-- Mind-Blowing Comparisons -->
     <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
       <h3 style="margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 600; color: #1e1e1e; text-align: center;">🤯 That's equivalent to scrolling...</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center;">
@@ -290,7 +287,6 @@ function calculate() {
       </div>
     </div>
 
-    <!-- Life Context -->
     <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
       <div style="text-align: center;">
         <div style="font-size: 1rem; color: #856404; margin-bottom: 8px;">⏳ <strong>Life remaining:</strong> ${yearsRemaining} yrs<br>(${remainingDays.toLocaleString()} days)</div>
@@ -304,4 +300,20 @@ function calculate() {
     
     <button id="ts-reset" onclick="resetCalculator()">Tombscroll Again</button>
   `;
+
+  // ✅ Add Sunlock CTA at the bottom
+  const sunlockCTA = document.createElement('div');
+  sunlockCTA.style.marginTop = '40px';
+  sunlockCTA.style.textAlign = 'center';
+  sunlockCTA.innerHTML = `
+    <p style="font-size: 1rem; max-width: 460px; margin: 0 auto 16px; line-height: 1.5;">
+      Want to stop losing your life to the scroll?<br>
+      <strong>Sunlock</strong> helps you break the habit — one morning at a time.
+    </p>
+    <a href="https://sunlock.app" target="_blank"
+       style="display: inline-block; margin-top: 8px; padding: 12px 20px; background-color: #6a00ff; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+      ☀️ Try Sunlock Now
+    </a>
+  `;
+  document.getElementById('ts-results').appendChild(sunlockCTA);
 }
